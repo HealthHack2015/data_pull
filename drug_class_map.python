@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+from bs4 import BeautifulSoup
+
+source_uri = "/Users/shayanmasood/Spark-dev/healthhack2015/drugbank.xml"
+data= open(source_uri,'r').read()
+
+soup= BeautifulSoup(data)
+
+rows = []
+for child in [el for el in soup.find("drugbank").children 
+  if el.name == "drug" and "approved" in [group.text for group in el.find_all("group")]]:
+    category=""
+    drug_name = child.find("name").text.replace("\n","")
+    indication = child.find("indication").text.replace("\n","")
+    if child.find("category") != None:
+      category = child.find("category").text.replace("\n","")
+    row = (drug_name,indication,category)
+    rows.append("|".join(row))
+
+outfile = open('/Users/shayanmasood/Spark-dev/healthhack2015/drugs',"wb")
+for item in rows:  
+  outfile.write("%s\n" % item.encode('utf-8').strip())
