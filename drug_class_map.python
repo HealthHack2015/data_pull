@@ -20,3 +20,4 @@ for child in [el for el in soup.find("drugbank").children
 outfile = open('/Users/shayanmasood/Spark-dev/healthhack2015/drugs',"wb")
 for item in rows:  
   outfile.write("%s\n" % item.encode('utf-8').strip())
+outfile.close()
